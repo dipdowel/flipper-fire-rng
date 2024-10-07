@@ -1,0 +1,133 @@
+#!/bin/bash
+
+LINE="―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――" 
+CONN_ERR="Is your Flipper Zero connected via USB?"
+PRESS_ANY_KEY="Press any key to continue..."
+SCREEN_IDLE="16"
+CONF_FILE="screen.conf"
+CURRENT_TIME=$(date +"%Y-%m-%d_%H-%M")
+OUTPUT_FILE="random.$CURRENT_TIME"
+REQUIRED_PROGRAMS=("sed" "tr" "screen")
+
+#================================================================================================
+# Check whether all the needed programs are present
+#================================================================================================
+
+# Function to check if a program is installed
+check_program() {
+    command -v "$1" &>/dev/null
+}
+
+
+# Array for missing programs
+missing_programs=()
+
+# Check whether programs are installed...
+for program in "${REQUIRED_PROGRAMS[@]}"; do
+    if ! check_program "$program"; then
+        missing_programs+=("$program")
+    fi
+done
+
+# Some programs not found, meh... quit.
+if [ ${#missing_programs[@]} -gt 0 ]; then
+    echo "Oops... The following programs are missing on your machine: ${missing_programs[*]}"
+    echo "Please install them using your package manager, e.g.:"
+    echo "sudo apt update && sudo apt install ${missing_programs[*]}"
+    exit 1
+fi
+
+
+
+#================================================================================================
+# Welcome splash
+#================================================================================================
+echo -e "\n$LINE"
+echo -e "          [🔥] C0113CT TRU3 R4ND0MN3SS 0F TH3 CH40S [🔥]"
+
+echo -e "$LINE\n"
+echo -e "  ⚠️   Make sure qFlipper is not running\n"
+echo -e "  You'll need:"
+echo -e "  \t- Your Flipper Zero (connected via USB)"
+echo -e "  \t- A lighter\n"
+
+echo -e "  $PRESS_ANY_KEY"
+read -n 1
+
+
+#================================================================================================
+# Make sure Flipper Zero is connected
+#================================================================================================
+
+# Device directory path
+DIR="/dev/serial/by-id/"
+
+# Check if the device directory exists (if not, Flipper is definitely not attached)
+if [ ! -d "$DIR" ]; then
+    echo "Error: Directory $DIR does not exist."
+    echo $CONN_ERR
+    exit 1
+fi
+
+# Search for a Filler device (name starts with "usb-Flipper_Devices_Inc")
+DEVICE=$(ls "$DIR" | grep -m 1 "^usb-Flipper_Devices_Inc")
+
+# Check if a matching device was found
+if [ -z "$DEVICE" ]; then
+    echo "Error: No Flipper device found ('usb-Flipper_Devices_Inc......')."
+    echo $CONN_ERR
+    exit 1
+fi
+
+# Did we find the Flipper?
+# echo "  Flipper Zero device found .... $DEVICE"
+
+DEVICE=$DIR$DEVICE
+
+#================================================================================================
+# Show instructions
+#================================================================================================
+echo -e "$LINE\n"
+echo -e "  On the next screen you'll be connected to the Flipper."
+echo -e "  When you see an empty screen, start flicking your lighter "
+echo -e "  one hand away from the Flipper's IR receiver.\n\n"
+echo -e "  ⚠️   \033[31;1;4mKeep a sane distance between the lighter and the Flipper!\033[0m\n"
+echo -e "  ⚠️   \e[4mRemember!\e[0m Only you are responsible for any potential damage!\n\n"
+
+echo -e "  The infrared radiation of the sparks and flame will become"
+echo -e "  digitised RANDOMNESS. You have $SCREEN_IDLE seconds for flicking.\n" 
+
+echo -e "  $PRESS_ANY_KEY"
+read -n 1
+
+
+
+#================================================================================================
+# Write configuration file for `screen`
+#================================================================================================
+echo -e "screen $DEVICE 230400" > $CONF_FILE
+echo -e "reset" >> $CONF_FILE
+echo -e "idle $SCREEN_IDLE quit" >> $CONF_FILE
+echo -e "logfile $OUTPUT_FILE" >> $CONF_FILE
+echo -e "log on" >> $CONF_FILE
+echo stuff '"ir rx raw\r"' >> $CONF_FILE
+
+
+#================================================================================================
+# Capture randomness
+#================================================================================================
+screen -c $CONF_FILE
+
+#================================================================================================
+# Process the data, clean up, and display the result
+#================================================================================================
+OUTPUT_FILE_TXT="$OUTPUT_FILE.txt"
+sed 's/[^0-9 ]//g' $OUTPUT_FILE > $OUTPUT_FILE_TXT
+tr -d '\n' < $OUTPUT_FILE | sed 's/[^0-9]//g' > $OUTPUT_FILE_TXT
+unlink $OUTPUT_FILE 
+echo -e "$LINE"
+echo -e "  Result saved to $OUTPUT_FILE_TXT"
+echo -e "$LINE"
+
+cat $OUTPUT_FILE_TXT
+echo -e "\n$LINE\n"
