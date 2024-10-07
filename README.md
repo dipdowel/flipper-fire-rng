@@ -3,7 +3,12 @@
 ```
 ⚠️   Disclaimer   ⚠️
 
-By using this software and by following all the enclosed instructions you acknowledge that it is provided "as is" without any warranties, express or implied. The user assumes all responsibility for any consequences, including but not limited to damage, loss of data, or other issues arising from the use of this software or following the enclosed instructions. The developer shall not be held liable for any claims, damages, or losses related to the use of this software and instructions.
+By using this software and by following all the enclosed instructions you acknowledge 
+that it is provided "as is" without any warranties, express or implied. 
+The user assumes all responsibility for any consequences, including but not limited to damage, 
+loss of data, or other issues arising from the use of this software 
+or following the enclosed instructions. The developer shall not be held liable for any claims, 
+damages, or losses related to the use of this software and instructions.
 ```
 
 ## Flipper Zero + a lighter = true random number generator!
@@ -18,10 +23,10 @@ This repo contains a script which does exactly that.
 ## How to use
 Currently there's only a version for Linux.
 
-1. Make sure you have the following programs installed
-- sed
-- tr
-- screen
+1. Make sure you have the following programs installed:
+	- sed
+	- tr
+	- screen
 2. Get a lighter (BiC, Zippo, etc).
 3. Make sure your Flipper Zero is connected to the computer.
 4. Stop `qFlipper` or any other software on the computer that talks to the Flipper.
@@ -35,3 +40,6 @@ Currently there's only a version for Linux.
 9. Flipper will record the infrared radiation as random digital data.
 10. You have 16 seconds to generate random data with the lighter
 11. Once the time runs out, the script cleans up the data and saves it to a file in the current working directory
+
+## Results
+![Flipper Fire RNG results](./static/results.png)
