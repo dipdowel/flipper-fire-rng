@@ -20,6 +20,8 @@ damages, or losses related to the use of this software and instructions.
 
 This repo contains a script which does exactly that. 
 
+![Flipper Fire RNG results](./static/results.png)
+
 ## How to use
 Currently there's only a version for Linux.
 
@@ -40,6 +42,3 @@ Currently there's only a version for Linux.
 9. Flipper will record the infrared radiation as random digital data.
 10. You have 16 seconds to generate random data with the lighter
 11. Once the time runs out, the script cleans up the data and saves it to a file in the current working directory
-
-## Results
-![Flipper Fire RNG results](./static/results.png)
