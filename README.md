@@ -38,7 +38,7 @@ Currently there's only a version for Linux.
 8. Once you see a blank screen, start flicking your lighter at a short distance from the Flipper, so that sparks and flame would be visible to the IR sensor.
 	- **NB:** Don't burn your Flipper!
 	- **NB:** Don't set anything around your on fire!
-	- **NB:** Be very carefulg!
+	- **NB:** Be very careful!
 9. Flipper will record the infrared radiation as random digital data.
-10. You have 16 seconds to generate random data with the lighter
-11. Once the time runs out, the script cleans up the data and saves it to a file in the current working directory
+10. You have 16 seconds to generate random data with the lighter.
+11. Once the time runs out, the script cleans up the data and saves it to a file in the current working directory.
