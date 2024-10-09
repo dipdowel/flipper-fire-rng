@@ -13,13 +13,16 @@ damages, or losses related to the use of this software and instructions.
 
 ## Flipper Zero + a lighter = true random number generator!
 
-1. The flame of a lighter or a candle emits infrared radiation.
-2. Flipper Zero has an IR sensor.
-3. The flame of a lighter is hardly predictable by nature.
-4. Combine the two and get a true Random Number Generator!
+1. Flipper Zero has an infrared sensor.
+2. The flame of a lighter or a candle emits infrared radiation.
+3. Most flames are hardly predictable by nature.
+4. Combine the 3 above and get a True Random Number Generator!
 
 This repo contains a script which does exactly that. 
 
+## → [🔥 Live Demo on YouTube 🔥](https://www.youtube.com/watch?v=s5Ac3KxHHsc) ←
+
+- - - - - 
 ![Flipper Fire RNG results](./static/results.png)
 
 ## How to use

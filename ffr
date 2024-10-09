@@ -3,7 +3,7 @@
 LINE="―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――" 
 CONN_ERR="Is your Flipper Zero connected via USB?"
 PRESS_ANY_KEY="Press any key to continue..."
-SCREEN_IDLE="16"
+SCREEN_IDLE="20"
 CONF_FILE="screen.conf"
 CURRENT_TIME=$(date +"%Y-%m-%d_%H-%M")
 OUTPUT_FILE="random.$CURRENT_TIME"
