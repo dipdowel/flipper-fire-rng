@@ -61,7 +61,7 @@ The random numbers were then checked with [dieharder RNG tests](https://manpages
 
 Interestingly enough, distribution of individual digits in the data is not uniform. `1`, `2` and `3` happen to occur more often than the other digits. Nevertheless, the dieharder tests don't see it as a problem. You can run a digit frequency test using `./freq YOUR_FILE_NAME`.
 
-Below are frequency graphs based on [data1.txt](static/data1.txt) and  [data2.txt](static/data2.txt):
+Below are frequency charts based on [data1.txt](static/data1.txt) and  [data2.txt](static/data2.txt):
 
 
 ![Distribution of digits generated with a lighter and Flipper Zero](static/digit-distribution.png)
