@@ -32,16 +32,36 @@ Currently there's only a version for Linux.
 	- sed
 	- tr
 	- screen
-2. Get a lighter (BiC, Zippo, etc).
-3. Make sure your Flipper Zero is connected to the computer.
-4. Stop `qFlipper` or any other software on the computer that talks to the Flipper.
-5. `chmod +x ffr`
-6. `./ffr`
-7. Follow instructions on the screen.
-8. Once you see a blank screen, start flicking your lighter at a short distance from the Flipper, so that sparks and flame would be visible to the IR sensor.
+
+2. Set Log Baud Rate to `230400` by navigating on your Flipper Zero to:
+```
+	Settings -> System -> Log Baud Rate: 230400
+```
+3. Get a lighter (BiC, Zippo, etc).
+4. Make sure your Flipper Zero is connected to the computer.
+5. Stop `qFlipper` or any other software on the computer that talks to the Flipper.
+6. `chmod +x ffr`
+7. `./ffr`
+8. Follow instructions on the screen.
+9. Once you see a blank screen, start flicking your lighter at a short distance from the Flipper, so that sparks and flame would be visible to the IR sensor.
 	- **NB:** Don't burn your Flipper!
 	- **NB:** Don't set anything around your on fire!
 	- **NB:** Be very careful!
-9. Flipper will record the infrared radiation as random digital data.
-10. You have 16 seconds to generate random data with the lighter.
-11. Once the time runs out, the script cleans up the data and saves it to a file in the current working directory.
+10. Flipper will record the infrared radiation as random digital data.
+11. You have 16 seconds to generate random data with the lighter.
+	- You can adjust the time of experiment by executing `./ffr <NUMBER_OF_SECONDS>`.
+12. Once the time runs out, the script cleans up the data and saves it to a file in the current working directory.
+
+
+## Some statistics
+The project contains files [data1.txt](static/data1.txt) and  [data2.txt](static/data2.txt) with random numbers collected by running `ffr 150` and flicking 2 different BIC lighters.
+The random numbers were then checked with [dieharder RNG tests](https://manpages.ubuntu.com/manpages/xenial/man1/dieharder.1.html) and results were generally satisfying:
+- [Result 1](static/dieharder_result1.md)
+- [Result 2](static/dieharder_result2.md)
+
+Interestingly enough, distribution of individual digits in the data is not uniform. `1`, `2` and `3` happen to occur more often than the other digits. Nevertheless, the dieharder tests don't see it as a problem. You can run a digit frequency test using `./freq YOUR_FILE_NAME`.
+
+Below are frequency graphs based on [data1.txt](static/data1.txt) and  [data2.txt](static/data2.txt):
+
+
+![Distribution of digits generated with a lighter and Flipper Zero](static/digit-distribution.png)

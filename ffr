@@ -1,13 +1,35 @@
 #!/bin/bash
 
+VER="0.1.3"
+REQUIRED_PROGRAMS=("sed" "tr" "screen")
+
 LINE="―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――" 
+
 CONN_ERR="Is your Flipper Zero connected via USB?"
 PRESS_ANY_KEY="Press any key to continue..."
-SCREEN_IDLE="20"
+SCREEN_IDLE="16"
 CONF_FILE="screen.conf"
 CURRENT_TIME=$(date +"%Y-%m-%d_%H-%M")
+
 OUTPUT_FILE="random.$CURRENT_TIME"
-REQUIRED_PROGRAMS=("sed" "tr" "screen")
+OUTPUT_FILE_IR="$OUTPUT_FILE.ir"
+OUTPUT_FILE_TXT="$OUTPUT_FILE.txt"
+
+USAGE="Usage: $0 <NUMBER>\nWhere NUMBER is the desired duration of the experiment in seconds."
+
+#================================================================================================
+# Check whether the user provided duration of the experiment
+#================================================================================================
+
+if [ -n "$1" ]; then
+  # Check for numeric
+  if [[ "$1" =~ ^[0-9]+$ ]]; then
+    SCREEN_IDLE=$1
+  else
+    echo -e $USAGE
+    exit 1  
+  fi
+fi
 
 #================================================================================================
 # Check whether all the needed programs are present
@@ -42,6 +64,7 @@ fi
 #================================================================================================
 # Welcome splash
 #================================================================================================
+echo -e "flipper-fire-rng v$VER"
 echo -e "\n$LINE"
 echo -e "          [🔥] C0113CT TRU3 R4ND0MN3SS 0F TH3 CH40S [🔥]"
 
@@ -50,6 +73,8 @@ echo -e "  ⚠️   Make sure qFlipper is not running\n"
 echo -e "  You'll need:"
 echo -e "  \t- Your Flipper Zero (connected via USB)"
 echo -e "  \t- A lighter\n"
+
+
 
 echo -e "  $PRESS_ANY_KEY"
 read -n 1
@@ -105,10 +130,11 @@ read -n 1
 #================================================================================================
 # Write configuration file for `screen`
 #================================================================================================
+
 echo -e "screen $DEVICE 230400" > $CONF_FILE
 echo -e "reset" >> $CONF_FILE
 echo -e "idle $SCREEN_IDLE quit" >> $CONF_FILE
-echo -e "logfile $OUTPUT_FILE" >> $CONF_FILE
+echo -e "logfile $OUTPUT_FILE_IR" >> $CONF_FILE
 echo -e "log on" >> $CONF_FILE
 echo stuff '"ir rx raw\r"' >> $CONF_FILE
 
@@ -121,13 +147,13 @@ screen -c $CONF_FILE
 #================================================================================================
 # Process the data, clean up, and display the result
 #================================================================================================
-OUTPUT_FILE_TXT="$OUTPUT_FILE.txt"
-sed 's/[^0-9 ]//g' $OUTPUT_FILE > $OUTPUT_FILE_TXT
-tr -d '\n' < $OUTPUT_FILE | sed 's/[^0-9]//g' > $OUTPUT_FILE_TXT
-unlink $OUTPUT_FILE 
+# Remove "RAW <number> sample". Filter out all non-digits. Remove new lines.
+sed '/RAW, [0-9]\+ sample/d' < $OUTPUT_FILE_IR | sed 's/[^0-9]//g' | tr -d '\n' > $OUTPUT_FILE_TXT
+
 echo -e "$LINE"
 echo -e "  Result saved to $OUTPUT_FILE_TXT"
 echo -e "$LINE"
 
 cat $OUTPUT_FILE_TXT
 echo -e "\n$LINE\n"
+unlink $OUTPUT_FILE_IR

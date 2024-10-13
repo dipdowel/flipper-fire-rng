@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Check if a file was provided as a command-line argument
+if [ -z "$1" ]; then
+  echo "This script counts how many times each digit (0-9) occurs in a given file"
+  echo "Usage: $0 FILE_NAME"
+  exit 1
+fi
+
+# Use the first argument as the file
+FILE="$1"
+
+# Check if the file exists
+if [ ! -f "$FILE" ]; then
+  echo "Error: File '$FILE' not found!"
+  exit 1
+fi
+
+echo -e "\nDigit\tFrequency\n"
+
+# Loop through digits 0-9
+for digit in {0..9}; do
+  # Use grep to count occurrences of the digit in the file
+  count=$(grep -o "$digit" "$FILE" | wc -l)  
+  echo -e "  $digit\t  $count"
+done
+echo -e "\n"
